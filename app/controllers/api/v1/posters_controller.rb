@@ -1,7 +1,7 @@
 class Api::V1::PostersController < ApplicationController
   def index
     posters = if params[:name]
-                posters = Poster.search_by_name(params[:name])
+                Poster.search_by_name(params[:name])
               else
                 case params[:sort]
                 when 'asc'
