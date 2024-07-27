@@ -1,12 +1,16 @@
 class Api::V1::PostersController < ApplicationController
   def index
-    posters = case params[:sort]
-              when 'asc'
-                Poster.order_by_created_at_asc
-              when 'desc'
-                Poster.order_by_created_at_desc
+    posters = if params[:name]
+                posters = Poster.search_by_name(params[:name])
               else
-                Poster.all
+                case params[:sort]
+                when 'asc'
+                  Poster.order_by_created_at_asc
+                when 'desc'
+                  Poster.order_by_created_at_desc
+                else
+                  Poster.all
+                end
               end
     render json: PostersSerializer.new(posters, meta: PostersSerializer.meta(posters))
   end
