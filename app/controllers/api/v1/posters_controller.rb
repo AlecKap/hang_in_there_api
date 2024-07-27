@@ -2,6 +2,10 @@ class Api::V1::PostersController < ApplicationController
   def index
     posters = if params[:name]
                 Poster.search_by_name(params[:name])
+              elsif params[:max_price]
+                Poster.filter_by_max_price(params[:max_price])
+              elsif params[:min_price]
+                Poster.filter_by_min_price(params[:min_price])
               else
                 case params[:sort]
                 when 'asc'
