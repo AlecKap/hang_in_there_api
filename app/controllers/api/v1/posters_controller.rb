@@ -5,7 +5,7 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def show
-    poster = Poster.find_by(id: params[:id])
+    poster = Poster.find(params[:id])
     render json: PostersSerializer.new(poster)
   end
 
@@ -19,7 +19,7 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def update
-    poster = Poster.find_by(id: params[:id])
+    poster = Poster.find(params[:id])
     poster.update(poster_params)
     render json: PostersSerializer.new(poster)
   end
