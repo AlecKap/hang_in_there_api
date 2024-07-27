@@ -53,5 +53,17 @@ RSpec.describe Poster, type: :model do
         expect(Poster.search_by_name("ce")).to eq([@poster3, @poster4])
       end
     end
+
+    describe '.filter_by_max_price' do
+      it 'returns posters that are less than or equal to the max price' do
+        expect(Poster.filter_by_max_price(88.00)).to eq([@poster2, @poster3])
+      end
+    end
+
+    describe '.filter_by_min_price' do
+      it 'returns posters that are greater than or equal to the min price' do
+        expect(Poster.filter_by_min_price(88.00)).to eq([@poster1, @poster4])
+      end
+    end
   end
 end
