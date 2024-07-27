@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get '/poster/:id', to: 'posters#show'
       post '/posters', to: 'posters#create'
       patch '/posters/:id', to: 'posters#update'
+      delete '/posters/:id', to: 'posters#destroy'
     end
   end
 end
