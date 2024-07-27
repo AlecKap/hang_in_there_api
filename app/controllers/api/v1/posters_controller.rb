@@ -1,7 +1,14 @@
 class Api::V1::PostersController < ApplicationController
   def index
-    posters = Poster.all
-    render json: PostersSerializer.new(posters)
+    posters = case params[:sort]
+              when 'asc'
+                Poster.order_by_created_at_asc
+              when 'desc'
+                Poster.order_by_created_at_desc
+              else
+                Poster.all
+              end
+    render json: PostersSerializer.new(posters, meta: PostersSerializer.meta(posters))
   end
 
   def show
