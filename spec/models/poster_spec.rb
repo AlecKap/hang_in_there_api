@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Poster, type: :model do
+  describe 'validations' do
+    it { should validate_presence_of :name }
+    it { should validate_uniqueness_of :name }
+    it { should validate_presence_of :description }
+    it { should validate_presence_of :year }
+    it { should validate_numericality_of(:year).only_integer }
+    it { should validate_presence_of :price }
+    it { should validate_numericality_of(:price)}
+    it { should validate_inclusion_of(:vintage).in_array([true, false]) }
+  end
+
   describe 'class methods' do
     before :each do
       @poster1 = Poster.create(name: "REGRET",
