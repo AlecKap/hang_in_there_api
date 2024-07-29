@@ -1,4 +1,9 @@
 class Poster < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
+  validates :description, presence: true
+  validates :year, presence: true, numericality: { only_integer: true }
+  validates :price, presence: true, numericality: true
+  validates :vintage, inclusion: { in: [true, false] }
 
   def self.order_by_created_at_asc
     order(created_at: :asc)
