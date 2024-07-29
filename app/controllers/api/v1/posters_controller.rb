@@ -1,21 +1,6 @@
 class Api::V1::PostersController < ApplicationController
   def index
-    posters = if params[:name]
-                Poster.search_by_name(params[:name])
-              elsif params[:max_price]
-                Poster.filter_by_max_price(params[:max_price])
-              elsif params[:min_price]
-                Poster.filter_by_min_price(params[:min_price])
-              else
-                case params[:sort]
-                when 'asc'
-                  Poster.order_by_created_at_asc
-                when 'desc'
-                  Poster.order_by_created_at_desc
-                else
-                  Poster.all
-                end
-              end
+    posters = fetch_posters
     render json: PostersSerializer.new(posters, meta: PostersSerializer.meta(posters))
   end
 
@@ -54,6 +39,29 @@ class Api::V1::PostersController < ApplicationController
   end
 
   private
+
+  def fetch_posters
+    if params[:name]
+      Poster.search_by_name(params[:name])
+    elsif params[:max_price]
+      Poster.filter_by_max_price(params[:max_price])
+    elsif params[:min_price]
+      Poster.filter_by_min_price(params[:min_price])
+    else
+      sort_posters
+    end
+  end
+  
+  def sort_posters
+    case params[:sort]
+    when 'asc'
+      Poster.order_by_created_at_asc
+    when 'desc'
+      Poster.order_by_created_at_desc
+    else
+      Poster.all
+    end
+  end
 
   def poster_params
     params.require(:poster).permit(:name, :description, :price, :year, :vintage, :img_url)
