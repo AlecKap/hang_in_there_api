@@ -1,16 +1,14 @@
 class Api::V1::PostersController < ApplicationController
   before_action :find_poster, only: [:show, :update, :destroy]
+  
   def index
     posters = fetch_posters
     render json: PostersSerializer.new(posters, meta: PostersSerializer.meta(posters))
   end
 
   def show
-    begin
-      render json: PostersSerializer.new(@poster), status: 200
-    rescue
-      render json: ErrorSerializer.serializer("Record not found", "404"), status: 404
-    end
+    render json: PostersSerializer.new(@poster), status: 200
+    rescue ActiveRecord::RecordNotFound
   end
 
   def create
