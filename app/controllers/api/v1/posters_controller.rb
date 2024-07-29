@@ -20,23 +20,32 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def show
-    poster = Poster.find(params[:id])
-    render json: PostersSerializer.new(poster)
+    begin
+      poster = Poster.find(params[:id])
+      render json: PostersSerializer.new(poster), status: 200
+    rescue
+      render json: ErrorSerializer.serializer("Record not found", "404"), status: 404
+    end
   end
 
   def create
-    poster = Poster.new(poster_params)
-    if poster.save
-      render json: PostersSerializer.new(poster)
-    else
-      render json: ErrorSerializer.new(poster.errors), status: :unprocessable_entity
+    begin
+      poster = Poster.new(poster_params)
+      poster.save!
+      render json: PostersSerializer.new(poster), status: 201
+    rescue => exception
+      render json: ErrorSerializer.serializer("#{exception.message.sub("Validation failed: ", "")}", "422"), status: 422
     end
   end
 
   def update
-    poster = Poster.find(params[:id])
-    poster.update(poster_params)
-    render json: PostersSerializer.new(poster)
+    begin
+      poster = Poster.find(params[:id])
+      poster.update!(poster_params)
+      render json: PostersSerializer.new(poster), status: 200
+    rescue => exception
+      render json: ErrorSerializer.serializer("#{exception.message.sub("Validation failed: ", "")}", "422"), status: 422
+    end    
   end
 
   def destroy
