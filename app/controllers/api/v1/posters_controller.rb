@@ -1,4 +1,5 @@
 class Api::V1::PostersController < ApplicationController
+  before_action :find_poster, only: [:show, :update, :destroy]
   def index
     posters = fetch_posters
     render json: PostersSerializer.new(posters, meta: PostersSerializer.meta(posters))
@@ -6,8 +7,7 @@ class Api::V1::PostersController < ApplicationController
 
   def show
     begin
-      poster = Poster.find(params[:id])
-      render json: PostersSerializer.new(poster), status: 200
+      render json: PostersSerializer.new(@poster), status: 200
     rescue
       render json: ErrorSerializer.serializer("Record not found", "404"), status: 404
     end
@@ -25,8 +25,7 @@ class Api::V1::PostersController < ApplicationController
 
   def update
     begin
-      poster = Poster.find(params[:id])
-      poster.update!(poster_params)
+      @poster.update!(poster_params)
       render json: PostersSerializer.new(poster), status: 200
     rescue => exception
       render json: ErrorSerializer.serializer("#{exception.message.sub("Validation failed: ", "")}", "422"), status: 422
@@ -34,8 +33,7 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def destroy
-    poster = Poster.find(params[:id])
-    poster.destroy
+    @poster.destroy
   end
 
   private
@@ -61,6 +59,10 @@ class Api::V1::PostersController < ApplicationController
     else
       Poster.all
     end
+  end
+
+  def find_poster
+    @poster = Poster.find(params[:id])
   end
 
   def poster_params
