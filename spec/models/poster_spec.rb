@@ -39,12 +39,12 @@ RSpec.describe Poster, type: :model do
                                 created_at: 3.days.ago)
         
         @poster4 = Poster.create(name: "SUCCESS",
-                                 description: "You did it!",
-                                 price: 98.00,
-                                 year: 2010,
-                                 vintage: true,
-                                 img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d",
-                                 created_at: 4.days.ago)                        
+                                description: "You did it!",
+                                price: 98.00,
+                                year: 2010,
+                                vintage: true,
+                                img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d",
+                                created_at: 4.days.ago)                        
       end
 
     describe '.order_by_created_at_asc' do
