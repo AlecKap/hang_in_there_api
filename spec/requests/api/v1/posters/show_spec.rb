@@ -6,6 +6,7 @@ RSpec.describe "Posters show request" do
     before :each do
       posters_test_data
     end
+
     it "returns a single poster by id" do
       id = @poster1.id
 
@@ -42,6 +43,28 @@ RSpec.describe "Posters show request" do
       expect(poster_attributes[:year]).to be_an(Integer)
       expect(poster_attributes[:vintage]).to be(true).or be(false)
       expect(poster_attributes[:img_url]).to be_a(String)
+    end
+
+    it "returns a 404 if the poster is not found" do
+      id = 0
+
+      get "/api/v1/posters/#{id}"
+
+      expect(response).to have_http_status(404)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data).to be_an(Hash)
+      expect(data.count).to eq(1)
+      expect(data).to have_key(:errors)
+      expect(data[:errors]).to be_an(Array)
+
+      error = data[:errors].first
+      expect(error.count).to eq(2)
+      expect(error).to have_key(:status)
+      expect(error).to have_key(:message)
+      expect(error[:status]).to eq("404")
+      expect(error[:message]).to eq("Record not found")
     end
   end
 end
