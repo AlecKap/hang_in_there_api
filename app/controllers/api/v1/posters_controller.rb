@@ -24,7 +24,7 @@ class Api::V1::PostersController < ApplicationController
   def update
     begin
       @poster.update!(poster_params)
-      render json: PostersSerializer.new(poster), status: 200
+      render json: PostersSerializer.new(@poster), status: 200
     rescue => exception
       render json: ErrorSerializer.serializer("#{exception.message.sub("Validation failed: ", "")}", "422"), status: 422
     end    
