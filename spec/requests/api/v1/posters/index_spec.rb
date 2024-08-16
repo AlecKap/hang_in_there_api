@@ -45,7 +45,6 @@ RSpec.describe 'Posters index request' do
       expect(poster_attributes[:year]).to be_an(Integer)
       expect(poster_attributes[:vintage]).to be(true).or be(false)
       expect(poster_attributes[:img_url]).to be_a(String)
-
     end
   end
 end
